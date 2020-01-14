@@ -1,0 +1,89 @@
+@SIZE 1024 1024 
+@BACKGROUND 255 255 255 
+@POSITION 0 0 
+@FRAME 8192
+
+DEF dim 1024
+
+FUNC Sqrt(x)
+	RETURN {exp(log([x])/2)}
+END FUNC
+
+FUNC Cuberoot(x)
+	RETURN {exp(log([x])/3)}
+END FUNC
+
+FUNC B(i,j)
+	SUB i 512 i
+	SUB j 512 j
+	DEF ii 0
+	MUL i i ii
+	DEF jj 0 
+	MUL j j jj
+	DEF d 0
+	ADD ii jj d
+	CALL Sqrt(d) d
+	DEF dd 0
+	MUL d d dd
+	CALL Cuberoot(dd) dd
+	RETURN {[d]+atan2([j],[i])*82+sin([dd])*32+sin(atan2([j],[i])*10)*64}
+END FUNC
+
+FUNC R(i,j)
+	MUL i 2 i
+	MUL j 2 j
+	DEF ret 0
+	CALL B(i,j) ret
+	SUB dim ret ret
+	RETURN ret
+END FUNC
+
+FUNC G(i,j)
+	DEF ret 0
+	CALL B(j,i) ret
+	ADD ret 128 ret
+	RETURN ret
+END FUNC
+
+FUNC Plot(x,y)
+	DEF r 0
+	CALL R(x,y) r
+	DEF g 0
+	CALL G(x,y) g
+	DEF b 0
+	CALL B(x,y) b
+	COLOR r g b
+	POS x y
+END FUNC
+
+FUNC Square(len)
+	CLOAK
+	DEF x 0
+	SUB 512 len x
+	DEF y 0
+	SUB 512 len y
+	MUL len 2 len
+	REPEAT len
+		CALL Plot(x,y) VOID
+		ADD y 1 y
+	END REPEAT
+	REPEAT len
+		CALL Plot(x,y) VOID
+		ADD x 1 x
+	END REPEAT
+	REPEAT len
+		CALL Plot(x,y) VOID
+		SUB y 1 y
+	END REPEAT
+	REPEAT len
+		CALL Plot(x,y) VOID
+		SUB x 1 x
+	END REPEAT
+END FUNC
+
+# main
+DEF i 0
+REPEAT 512
+	ADD i 1 i
+	CALL Square(i) VOID
+END REPEAT

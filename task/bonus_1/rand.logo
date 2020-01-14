@@ -1,0 +1,59 @@
+@SIZE 1024 1024 
+@BACKGROUND 255 255 255 
+@POSITION 0 0 
+@FRAME 0 
+DEF r 0.0
+DEF g 0.0
+DEF b 0.0
+FUNC Red(i,j) 
+	ADD r {(rand()%100000)/100000} r
+	DEF ri {[r]%512}
+	DEF p TRUE 
+	LEQ ri 255 p
+	IF p 
+		RETURN ri
+	END IF 
+	RETURN {511-[ri]}
+END FUNC 
+FUNC Green(i,j) 
+	ADD g {(rand()%100000)/100000} g
+	DEF gi {[g]%512}
+	DEF p TRUE 
+	LEQ gi 255 p
+	IF p 
+		RETURN gi
+	END IF 
+	RETURN {511-[gi]}
+END FUNC 
+FUNC Blue(i,j) 
+	ADD b {(rand()%100000)/100000} b
+	DEF bi {[b]%512}
+	DEF p TRUE 
+	LEQ bi 255 p
+	IF p 
+		RETURN bi
+	END IF 
+	RETURN {511-[bi]}
+END FUNC 
+DEF i 0 
+DEF j 0 
+DEF pi TRUE 
+DEF pj TRUE 
+DEF rr 0.0 
+DEF gg 0.0 
+DEF bb 0.0 
+WHILE pi 
+	SET pj TRUE 
+	SET j 0 
+	WHILE pj 
+		CALL Red(i,j) rr 
+		CALL Green(i,j) gg 
+		CALL Blue(i,j) bb
+		COLOR rr gg bb
+		POS i j 
+		ADD j 1 j 
+		LEQ j 1024 pj
+	END WHILE 
+	ADD i 1 i 
+	LEQ i 1024 pi
+END WHILE 
